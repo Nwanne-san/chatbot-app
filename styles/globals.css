@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 body {
   background-color: slategrey;
 }
@@ -29,7 +27,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   gap: 16px;
-  /* padding: 20px; */
+  /* padding: 20px;  */
 }
 
 #chat-messages {

@@ -13,11 +13,11 @@ export default function Home(){
   // const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState('');
    
-  // React.useEffect(() = {
-  //   if(session){
-  //     router.push('chat.js')
-  //   }
-  // })
+  React.useEffect(() => {
+    if(session){
+      router.push('chat.js')
+    }
+  },[])
 
   return ( 
     <>

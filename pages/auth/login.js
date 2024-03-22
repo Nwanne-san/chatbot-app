@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { authentication } from '@/settings/firebase.settings';
+import { authentication } from '@/settings/firebase.setting';
 import { useRouter } from 'next/router';
 import { useSession,signIn } from 'next-auth/react';
 
@@ -20,7 +20,7 @@ export default function Login() {
     const router = useRouter()
 
     if (session) {
-      router.push('/chat.js')
+      router.push('/chat')
     }
 
   return (
@@ -37,6 +37,7 @@ export default function Login() {
         <button type="submit">Login</button>
       </form>
       <p>New user? <Link href="/signup">Sign up here</Link></p>
+      <button onClick={() => signIn('google')} >Google</button>
     </div>
   );
 }

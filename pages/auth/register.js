@@ -1,69 +1,121 @@
-import { useState } from 'react';
+import Link from 'next/link';
+import { useFormik} from 'formik';
+import * as yup from 'yup';
+import { signIn, useSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../api/auth/[...nextauth]';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { useRouter } from 'next/router';
+import { authentication, googleProvider} from '@/settings/firebase.setting';
+import { use } from 'react';
 
-const LoginPage = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [rememberMe, setRememberMe] = useState(false);
+//validation rules
+const validationRules = yup.object().shape({
+    email:yup.string().email()
+    .required('field is compulsory'),
+    password:yup.string()
+    .required()
+    .min(8, 'must be up to 8 characters')
+    .max(20, 'max of 20 characters')
+    
+})
 
-    const handleLogin = (e) => {
-        e.preventDefault();
-        // Handle login logic here
+export default function Signup() {
+    const {data:session} = useSession(); //shows the info of the active account
+    console.log(session) 
+
+    const router = useRouter();
+
+    if (session) { //meaning if the session is active
+        router.push('/chat')
+    }
+
+    const handleGoogleEmailPasswordCreateAccount = async (userEmail,userPassword) => {
+        createUserWithEmailAndPassword(authentication,userEmail,userPassword)
+        .then((user) => {
+            alert(`${user} created successfully`);
+            console.log(user)
+        })
+        .catch((error) => console.log(error))
     };
 
-    return (
-        <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-gray-100 via-skyblue to-blue-500">
-            <div className="wrapper bg-transparent backdrop-filter backdrop-blur-md border-2 border-white border-opacity-30 rounded-lg shadow-md flex justify-center items-center">
-                <div className="form-box">
-                    <ion-icon name="close" className="icon w-8 h-8 bg-black bg-opacity-50 rounded-full absolute top-0 right-0"></ion-icon>
-                    <h2 className="text-2xl text-black mb-4">Login</h2>
-                    <form onSubmit={handleLogin}>
-                        <div className="input-box">
-                            <span className="icon">
-                                <ion-icon name="mail"></ion-icon>
-                            </span>
-                            <input
-                                className="mail w-full h-12 bg-transparent border-b-2 border-black focus:outline-none text-black"
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                            <label>Email</label>
-                        </div>
-                        <div className="input-box">
-                            <span className="icon">
-                                <ion-icon name="lock-closed"></ion-icon>
-                            </span>
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="w-full h-12 bg-transparent border-b-2 border-black focus:outline-none text-black"
-                                required
-                            />
-                            <label>Password</label>
-                        </div>
-                        <div className="remember">
-                            <label className="flex items-center">
-                                <input
-                                    type="checkbox"
-                                    checked={rememberMe}
-                                    onChange={(e) => setRememberMe(e.target.checked)}
-                                    className="mr-2 cursor-pointer"
-                                />
-                                Remember me
-                            </label>
-                            <a href="#" className="text-black">Forgot Password?</a>
-                        </div>
-                        <button type="submit" className="btn">Login</button>
-                        <div className="login-register">
-                            <p>Don't have an account yet? <a href="#" className="register-link text-black font-semibold">Register now.</a></p>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    );
-};
+    const signInWithGoogle = async () => {
+      signInWithEmailAndPassword(authentication, googleProvider).then((user) => console.log(user))
+      .catch((e) => console.error(e))
+    }
 
-export default LoginPage;
+    const {handleBlur,handleSubmit,handleChange,errors,touched,values} =  useFormik({
+        initialValues:{username:'',email:'',password:''}, //the IDs are used here
+        onSubmit: values => { //this block of code runs only if no errors occur
+            handleGoogleEmailPasswordCreateAccount(values.email,values.password) 
+        },
+        validationSchema:validationRules //returns the yup function, and handles errors
+    })
+
+  return (
+    <div className='w-full h-screen flex gap-5 justify-center  items-center'>
+      <div className='flex justify-center py-3 px-6'>
+        <div className='w-[360px] py-3 px-6 flex flex-col gap-3 bg-slate-600'>
+          <h1 className='font-sans font-extrabold flex justify-center text-3xl'>Sign Up</h1>
+          <form className='flex flex-col p-4 gap-3' onSubmit={handleSubmit}>
+            <input
+            id='username'
+            type="text"
+            placeholder="Username"
+            value={values.username}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className='px-3 py-2 border-none rounded-lg focus:border-none '
+            />
+            <input
+            id='email'
+            type="email"
+            value={values.email}
+            placeholder="Email address"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className='px-3 py-2 border-none rounded-lg  '
+            />{errors.email && touched.email ? <span className='text-red-500'>{errors.email}</span> : null}
+            <input
+            id='password'
+            type="password"
+            value={values.password}
+            placeholder="Password"
+            onChange={handleChange}
+            className='px-3 py-2 border-none rounded-lg focus:border-none '/>
+            {errors.password && touched.password ?<span className='text-red-600'>{errors.password}</span> : null}
+            <button type="submit">Sign Up</button>
+          </form>
+
+          <p>Already have an account ? <Link href='login'>Login here</Link></p>
+          <button onClick={() => signIn('google')} >Google</button>
+        </div>
+        {/* <div className='flex justify-center place-items-center'>
+          <div className='w-[360px] py-3 px-6 flex flex-col gap-3 bg-slate-600'>
+            <h1 className='font-sans font-extrabold flex justify-center text-3xl'>Login</h1>
+            <form className='flex flex-col p-4 gap-3'>
+              <input
+              id='userName'
+              type="text"
+              placeholder="Username"
+              onChange={handleChange}
+              className='px-3 py-2 border-none rounded-lg '
+              />
+              <input
+              id='pass'
+              type="password"
+              value={values.pass}
+              placeholder="Password"
+              className='px-3 py-2 border-none rounded-lg '
+               />
+              {errors.pass && touched.pass ?<span className='text-red-600'>{errors.password}</span> : null}
+              <button onClick={signInWithGoogle}>Login</button>
+            </form>
+          
+            <button onClick={signInWithGoogle} >Google</button>
+          </div>
+        </div> */}
+      </div>
+    </div>
+  );
+}

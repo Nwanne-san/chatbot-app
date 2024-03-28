@@ -3,24 +3,25 @@
 @tailwind utilities; */
 
 body {
-  background-color: slategrey;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: background-color 0.5s ease;
 }
-/*  
- @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}  */
+
 
 .light{
-  background-color: #0056b3;
+  transition: background-color 0.5s ease;
 }
 
 .dark-theme{
   background-color: slategrey;
+  transition: background-color 0.5s ease;
 }
 
-
+.desktop-bg{
+  background-image: linear-gradient(rgba(97, 103, 122, 0.5), rgba(39, 40, 41, 0.9)),url('/public/learning.jpg');
+  background-size: cover;
+}
+/* 
 #chat-window {
   height: 100vh;
   display: flex;
@@ -28,7 +29,8 @@ body {
   justify-content: space-between;
   gap: 16px;
   /* padding: 20px;  */
-}
+
+
 
 #chat-messages {
   border: 1px solid #ccc;
@@ -43,46 +45,17 @@ body {
 #chat-messages > div {
   margin-bottom: 5px;
 }
+
+
 /* 
-input {
-  width: 100%;
-  padding: 8px 12px;
-}
-
-input:active{
-  border:none;
-
-}
-
-button {
-  padding: 10px 16px;
-  background-color: rgba(86, 19, 210, 0.644);
-  color: black;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 600;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #0056b3;
-} */
-
-/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;700;900&display=swap') */
+ @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;700;900&display=swap') 
 
 *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
-}
-
-body {
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(gray,skyblue, rgba(0, 0, 255, 0.799));
-}
+} */
 
 header {
   position: fixed;
@@ -163,8 +136,7 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* transform: scale(0); */
-}
+} 
 
 .form-box{
   position: relative;

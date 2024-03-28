@@ -12,14 +12,18 @@ const LoginPage = () => {
         // Handle login logic here
     };
 
+    const [theme, setTheme] = useState(false)
+    const toggleTheme = () => setTheme(!theme)
+
     return (
         <>
-        <Navbar/>
-        <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-gray-100 via-skyblue to-blue-500">
-            <div className="wrapper bg-transparent backdrop-filter backdrop-blur-md border-2 border-white border-opacity-30 rounded-lg shadow-md flex justify-center items-center">
+        <div id="chat-window" className={theme ? 'dark-theme' : 'light'} >
+        <div className="flex justify-center items-center min-h-screen ">
+        <Navbar theme={theme} toggleTheme={toggleTheme} />
+            <div className="wrapper  backdrop-filter backdrop-blur-md border-2 border-white border-opacity-30 rounded-lg shadow-md flex justify-center items-center ">
                 <div className="form-box">
                     <ion-icon name="close" className="icon w-8 h-8 bg-black bg-opacity-50 rounded-full absolute top-0 right-0"></ion-icon>
-                    <h2 className="text-2xl text-black mb-4">Login</h2>
+                    <h2 className="text-3xl text-black mb-6 font-extrabold font-sans">Login</h2>
                     <form onSubmit={handleLogin}>
                         <div className="input-box">
                             <span className="icon">
@@ -66,6 +70,7 @@ const LoginPage = () => {
                     </form>
                 </div>
             </div>
+        </div>
         </div>
         </>
     );

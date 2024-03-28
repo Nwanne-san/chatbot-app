@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useFormik} from 'formik';
 import * as yup from 'yup';
+import { useState } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
@@ -8,6 +9,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'fire
 import { useRouter } from 'next/router';
 import { authentication, googleProvider} from '@/settings/firebase.setting';
 import { use } from 'react';
+import Navbar from '@/components/navbar';
 
 //validation rules
 const validationRules = yup.object().shape({
@@ -22,10 +24,7 @@ const validationRules = yup.object().shape({
 
 export default function Signup() {
     const {data:session} = useSession(); //shows the info of the active account
-    console.log(session) 
-
     const router = useRouter();
-
     if (session) { //meaning if the session is active
         router.push('/chat')
     }
@@ -52,8 +51,15 @@ export default function Signup() {
         validationSchema:validationRules //returns the yup function, and handles errors
     })
 
+
+    const [theme, setTheme] = useState(false)
+    const toggleTheme = () => setTheme(!theme)
   return (
+    <div id="chat-window" className={theme ? 'dark-theme' : 'light'} >
+    
     <div className='w-full h-screen flex gap-5 justify-center  items-center'>
+        <Navbar theme={theme} toggleTheme={toggleTheme} />
+
       <div className='flex justify-center py-3 px-6'>
         <div className='w-[360px] py-3 px-6 flex flex-col gap-3 bg-slate-600'>
           <h1 className='font-sans font-extrabold flex justify-center text-3xl'>Sign Up</h1>
@@ -90,32 +96,8 @@ export default function Signup() {
           <p>Already have an account ? <Link href='login'>Login here</Link></p>
           <button onClick={() => signIn('google')} >Google</button>
         </div>
-        {/* <div className='flex justify-center place-items-center'>
-          <div className='w-[360px] py-3 px-6 flex flex-col gap-3 bg-slate-600'>
-            <h1 className='font-sans font-extrabold flex justify-center text-3xl'>Login</h1>
-            <form className='flex flex-col p-4 gap-3'>
-              <input
-              id='userName'
-              type="text"
-              placeholder="Username"
-              onChange={handleChange}
-              className='px-3 py-2 border-none rounded-lg '
-              />
-              <input
-              id='pass'
-              type="password"
-              value={values.pass}
-              placeholder="Password"
-              className='px-3 py-2 border-none rounded-lg '
-               />
-              {errors.pass && touched.pass ?<span className='text-red-600'>{errors.password}</span> : null}
-              <button onClick={signInWithGoogle}>Login</button>
-            </form>
-          
-            <button onClick={signInWithGoogle} >Google</button>
-          </div>
-        </div> */}
       </div>
+    </div>
     </div>
   );
 }

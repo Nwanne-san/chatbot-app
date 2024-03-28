@@ -21,34 +21,17 @@ export default function Home(){
 
   return ( 
     <>
-    <div id="chat-window"  >
-      <div>
-        <Navbar/>
-        <div className='flex flex-row items-center text-center p-2 justify-between'>
-          <h1 className='text-3xl font-sans'>AI CHATBOT</h1>
-          <div className='flex flex-row gap-2 items-center'>
-            <button onClick={signOut} >Logout</button>
-          </div>
+    <div className='w-full h-screen desktop-bg flex justify-center px-8  items-center '>
+      <div className='w-5/6 flex flex-row justify-around items-center h-4/6 px-8 py-10 bg-indigo-400/20 gap-5'>
+        <div className=' '>
+          <p className='text-4xl font-bold font-serif'>Welcome to AI Chatbot.</p>
         </div>
+        <div className='flex flex-col gap-5 items-center justify-center'>
+          <Link href='auth/register' className='min-w-auto px-6 py-3 rounded-md text-lg text-white bg-indigo-700 hover:bg-indigo-900 hover:duration-150'>Sign Up</Link>
+          <Link href='auth/login' className='min-w-full px-6 py-3 rounded-md text-lg text-white bg-indigo-700 hover:bg-indigo-900 hover:duration-150'>Sign in</Link>
+        </div>
+
       </div>
-      
-      {/* <div id="chat-messages">
-        {messages.map((message, index) => (
-          <div key={index}>{`${message.sender}: ${message.text}`}</div>
-        ))}
-      </div> */}
-      <div className='w-full flex flex-row gap-4'>
-        <input
-          type="text"
-          className='w-full'
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          placeholder="Type your message..."
-        />
-        <button >Send</button>
-        <Link href="/login" className="text-blue-800 hover:underline">Login or Sign Up </Link>
-      </div>
-      
     </div>
     </>
     

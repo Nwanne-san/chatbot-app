@@ -10,7 +10,6 @@ export default function Home(){
   const {data:session} = useSession();
   const router = useRouter();
  
-  // const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState('');
    
   React.useEffect(() => {

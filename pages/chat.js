@@ -1,4 +1,4 @@
-
+import Image from 'next/image';
 import React, {useState} from 'react';
 import { Brightness7, DarkMode } from '@mui/icons-material'
 import { signOut } from 'next-auth/react';
@@ -54,11 +54,18 @@ export default function Chat(){
     <>
     <div id="chat-window" className={theme ? 'dark-theme': 'light'} >
       <div className=' min-h-screen flex flex-col justify-between'>
-        <div className='flex flex-row items-center text-center p-2 justify-between'>
+        <div className='flex flex-row items-center text-center py-2 px-4 justify-between'>
           <h1 className='text-3xl font-sans'>AI CHATBOT</h1>
-          <div className='flex flex-row gap-2 items-center'>
-            <button onClick={signOut}>Logout</button>
-            <button onClick={toggleTheme}>{ theme ? <Brightness7/> : <DarkMode/>}</button>
+          <div className='flex flex-row gap-3 items-center'>
+            <span className='text-lg font-bold'>{session?.user.name}</span>
+              <Image
+              className="rounded-full" 
+              width={58} 
+              height={58} 
+              src={session?.user.image}
+              />
+            <button onClick={signOut} className='py-2 px-3 hover:bg-black hover:text-white rounded-lg duration-150'>Logout</button>
+            <button onClick={toggleTheme} className='p-2 hover:bg-black/30 rounded-full duration-150'>{ theme ? <Brightness7/> : <DarkMode/>}</button>
           </div>
         </div>
         
